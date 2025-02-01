@@ -42,8 +42,8 @@ def loop_find_mail(con):
 
                     # printing the required content which we need
                     # to extract from our email i.e our body
-                    print(data2[0: indexend])
-                    if "via upwork" in data2[0:indexend].lower() and "ahmed" not in data2[0:indexend].lower():
+                    if "you have unread messages" in data2[0:indexend].lower():
+                        print(data2[0: indexend])
                     # if "via upwork" in data2[0:indexend].lower():
                         subprocess.run("python phone_calls.py", shell = True)
                         # play_sound.play_sound("note.mp3")
@@ -73,14 +73,19 @@ def get_emails(result_bytes):
     return msgs
 
 # this is done to make SSL connection with GMAIL
-con = imaplib.IMAP4_SSL(imap_url)
-
-# logging the user in
-con.login(user, password)
-
-# calling function to check for email under this label
-con.select('Inbox')
 while(1):
-    loop_find_mail(con)
-    time.sleep(60)
-# msgs = get_emails(search('FROM', 'hello@info.crunchyroll.com', con))
+    con = imaplib.IMAP4_SSL(imap_url)
+    # logging the user in
+    con.login(user, password)
+    # calling function to check for email under this label
+    con.select('Inbox')
+    try:
+        while(1):
+            loop_find_mail(con)
+            time.sleep(60)
+    # msgs = get_emails(search('FROM', 'hello@info.crunchyroll.com', con))
+    except imaplib.IMAP4.abort as e:
+        print("Re-initialize IMAP connection")
+        con.logout()
+        continue
+
