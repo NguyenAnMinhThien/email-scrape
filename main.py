@@ -5,8 +5,7 @@ import subprocess
 
 import play_sound
 
-user = 'nguyenanminhthien97@gmail.com'
-password = 'jzfj pbjb yfjh eghh'
+
 imap_url = 'imap.gmail.com'
 
 def loop_find_mail(con):
