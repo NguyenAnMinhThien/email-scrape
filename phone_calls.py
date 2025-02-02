@@ -30,3 +30,4 @@ def dial_numbers(numbers_list):
 
 if __name__ == "__main__":
     dial_numbers(DIAL_NUMBERS)
+

@@ -3,7 +3,6 @@ import imaplib, email
 import time
 import subprocess
 
-import play_sound
 
 user = 'nguyenanminhthien97@gmail.com'
 password = 'jzfj pbjb yfjh eghh'
@@ -89,3 +88,4 @@ while(1):
         con.logout()
         continue
 
+#     when send the code to virtual server, just use 60 seconds, not only 10 seconds, it will cause the script can not excute in continue - !
