@@ -2,10 +2,14 @@
 import imaplib, email
 import time
 import subprocess
+import dotenv
+import os
 
+dotenv.load_dotenv()
 
-user = 'nguyenanminhthien97@gmail.com'
-password = 'jzfj pbjb yfjh eghh'
+user = os.getenv("user_imap")
+password = os.getenv("password")
+
 imap_url = 'imap.gmail.com'
 
 def loop_find_mail(con):
@@ -24,9 +28,8 @@ def loop_find_mail(con):
         for sent in msg:
             if type(sent) is tuple:
 
-                # encoding set as utf-8
-                content = str(sent[1], 'utf-8')
-                data = str(content)
+                # encoding set as utf-8, our data is nested inside multiple layer.
+                data = str(sent[1], 'utf-8')
                 # for str_line in data:
                 #     if "via Upwork" in str_line:
                 #         print(str_line)
@@ -51,11 +54,11 @@ def loop_find_mail(con):
                 except UnicodeEncodeError as e:
                     pass
 # Function to get email content part i.e its body part
-def get_body(msg):
-    if msg.is_multipart():
-        return get_body(msg.get_payload(0))
-    else:
-        return msg.get_payload(None, True)
+# def get_body(msg):
+#     if msg.is_multipart():
+#         return get_body(msg.get_payload(0))
+#     else:
+#         return msg.get_payload(None, True)
 
 # Function to search for a key value pair
 def search(key, value, con):
@@ -73,19 +76,19 @@ def get_emails(result_bytes):
 
 # this is done to make SSL connection with GMAIL
 while(1):
-    con = imaplib.IMAP4_SSL(imap_url)
-    # logging the user in
-    con.login(user, password)
-    # calling function to check for email under this label
-    con.select('Inbox')
     try:
-        while(1):
-            loop_find_mail(con)
-            time.sleep(60)
+        con = imaplib.IMAP4_SSL(imap_url)
+        # logging the user in
+        con.login(user, password)
+        # calling function to check for email under this label
+        con.select('Inbox')
+        loop_find_mail(con)
+        time.sleep(60)
     # msgs = get_emails(search('FROM', 'hello@info.crunchyroll.com', con))
     except imaplib.IMAP4.abort as e:
         print("Re-initialize IMAP connection")
-        con.logout()
         continue
+    finally:
+        con.logout()
 
 #     when send the code to virtual server, just use 60 seconds, not only 10 seconds, it will cause the script can not excute in continue - !
