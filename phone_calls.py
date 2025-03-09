@@ -15,7 +15,7 @@ TWIML_INSTRUCTIONS_URL = \
 
 # replace the placeholder values with your Account SID and Auth Token
 # found on the Twilio Console: https://www.twilio.com/console
-client = Client("ACe23cff3dd02a505bf522f03968f5d8b4", "ebff85f884ab4f6c658bef9ca4ebceca")
+client = Client("ACe23cff3dd02a505bf522f03968f5d8b4", "207fffb07792a39fea3e82674e99ee2f")
 
 # client.calls.create()
 def dial_numbers(numbers_list):
@@ -30,4 +30,3 @@ def dial_numbers(numbers_list):
 
 if __name__ == "__main__":
     dial_numbers(DIAL_NUMBERS)
-
