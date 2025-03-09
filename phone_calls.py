@@ -1,6 +1,12 @@
 from twilio.rest import Client
 from urllib.parse import urlparse
 
+import dotenv
+import os
+
+dotenv.load_dotenv()
+user = os.getenv("user_twilio")
+password = os.getenv("pass_twilio")
 
 # Twilio phone number goes here. Grab one at https://twilio.com/try-twilio
 # and use the E.164 format, for example: "+12025551234"
@@ -15,7 +21,7 @@ TWIML_INSTRUCTIONS_URL = \
 
 # replace the placeholder values with your Account SID and Auth Token
 # found on the Twilio Console: https://www.twilio.com/console
-client = Client("ACe23cff3dd02a505bf522f03968f5d8b4", "207fffb07792a39fea3e82674e99ee2f")
+client = Client(user, password)
 
 # client.calls.create()
 def dial_numbers(numbers_list):
