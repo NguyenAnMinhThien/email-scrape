@@ -11,8 +11,8 @@ password = os.getenv("password")
 imap_url = 'imap.gmail.com'
 
 def loop_find_mail(con):
-    # msgs = get_emails(search('FROM', "upwork.com", con)) #heree
-    msgs = get_emails(search('FROM', "nguyenanminhthien97@gmail.com", con))
+    msgs = get_emails(search('FROM', "upwork.com", con)) #heree
+    # msgs = get_emails(search('FROM', "namthien0503@gmail.com", con))
     for msg in msgs[::-1]:
         for sent in msg:
             if type(sent) is tuple:
@@ -22,13 +22,14 @@ def loop_find_mail(con):
                     indexstart = data.find("ltr")
                     data2 = data[indexstart + 5: len(data)]
                     indexend = data2.find("</div>")
-                    # if "you have unread messages" in data2[0:indexend].lower():
-                    #     print(data2[0: indexend])
-                    #     subprocess.run("python phone_calls.py", shell = True)
-                    #     # play_sound.play_sound("note.mp3")
-                    #     return
+                    if "you have unread messages" in data2[0:indexend].lower():
+                        print(data2[0: indexend])
+                        subprocess.run("python phone_calls.py", shell = True)
+                        # play_sound.play_sound("note.mp3")
+                        return
 
-                    print(data2[0: indexend])
+                    # print("\nemail_heree\n")
+                    # print(data2[0: indexend])
 
                 # pass the unicode Encode error
                 except UnicodeEncodeError as e:
