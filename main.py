@@ -1,4 +1,5 @@
 # Importing libraries
+import datetime
 import imaplib, email
 import time
 import subprocess
@@ -11,8 +12,8 @@ password = os.getenv("password")
 imap_url = 'imap.gmail.com'
 
 def loop_find_mail(con):
-    # msgs = get_emails(search('FROM', "upwork.com", con)) #heree
-    msgs = get_emails(search('FROM', "nguyenanminhthien@gmail.com", con))
+    msgs = get_emails(search('FROM', "upwork.com", con)) #heree
+    # msgs = get_emails(search('FROM', "nguyenanminhthien97@gmail.com", con))
     # msgs = get_emails(search('FROM', "namthien0503@gmail.com", con))
     for msg in msgs[::-1]:
         for sent in msg:
@@ -23,14 +24,14 @@ def loop_find_mail(con):
                     indexstart = data.find("ltr")
                     data2 = data[indexstart + 5: len(data)]
                     indexend = data2.find("</div>")
-                    # if "you have unread messages" in data2[0:indexend].lower():
-                    #     print(data2[0: indexend])
-                    #     subprocess.run("python phone_calls.py", shell = True)
-                    #     # play_sound.play_sound("note.mp3")
-                    #     return
+                    if "you have unread messages" in data2[0:indexend].lower():
+                        print(data2[0: indexend])
+                        subprocess.run("python phone_calls.py", shell = True)
+                        # play_sound.play_sound("note.mp3")
+                        return
 
-                    print("\nemail_heree\n")
-                    print(data2[0: indexend])
+                    # print("\nemail_heree\n")
+                    # print(data2[0: indexend])
 
                 # pass the unicode Encode error
                 except UnicodeEncodeError as e:
@@ -54,21 +55,27 @@ def get_emails(result_bytes):
         typ, data = con.fetch(num, '(RFC822)')
         msgs.append(data)
     return msgs
+def check_14hours(current,seconds):
+    delta = datetime.datetime.now() - current
+    if delta.total_seconds() < seconds:
+        return True
+    else:
+        return False
 
 if __name__ == '__main__':
     # this is done to make SSL connection with GMAIL
-    con = imaplib.IMAP4_SSL(imap_url)
-    while(1):
+    current_time = datetime.datetime.now()
+    while(check_14hours(current_time,50400)):
+        con = imaplib.IMAP4_SSL(imap_url)
         try:
             con.login(user, password)
             con.select('Inbox')
             loop_find_mail(con)
-            time.sleep(20)
+            time.sleep(60)
         # except imaplib.IMAP4.abort as e:
         except Exception as e:
             print("Re-initializing IMAP connection dueto :",e,"\n")
-            con.logout()
-            con = imaplib.IMAP4_SSL(imap_url)
             pass
+        con.logout()
 
     #     when send the code to virtual server, just use 60 seconds, not only 10 seconds, it will cause the script can not excute in continue - !
