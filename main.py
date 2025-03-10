@@ -26,7 +26,7 @@ def loop_find_mail(con):
                     indexend = data2.find("</div>")
                     if "you have unread messages" in data2[0:indexend].lower():
                         print(data2[0: indexend])
-                        subprocess.run("python phone_calls.py", shell = True)
+                        subprocess.run("python3 phone_calls.py", shell = True)
                         # play_sound.play_sound("note.mp3")
                         return
 
